@@ -9,7 +9,7 @@ export default class App extends Component {
 
     clickedOff() {
         console.log('Switching lights off');
-        request.post('http://localhost:8081/lights/on');
+        request.post('http://localhost:8081/lights/off');
     }
 
     render () {
