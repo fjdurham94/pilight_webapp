@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grommet, Box, ResponsiveContext, Button } from 'grommet';
+import { Grommet, Box, ResponsiveContext, Button, Text } from 'grommet';
 import request from 'request';
 
 import AppBar from './components/AppBar';
@@ -46,9 +46,9 @@ export default class App extends Component {
                 <AppBar title='Daylightr'/>
                 <ResponsiveContext.Consumer flex align='center' justify='center'>
                 { (size) => (
-                    <Box align='center'>
-                        <p>Light it up</p>
-                        <Box direction='row' gap='large'>
+                    <Box align='center' margin='large'>
+                        <Text size={ size }>Light it up</Text>
+                        <Box direction='row' gap={ size } margin='large'>
                             <Button label='On' onClick={ this.clickedOn }/>
                             <Button label='Off' onClick={ this.clickedOff }/>
                         </Box>
