@@ -5,6 +5,11 @@ var parentDir = path.join(__dirname, '../');
 
 module.exports = {
     mode: 'development',
+    node: {
+        fs: 'empty',
+        net: 'empty',
+        tls: 'empty'
+    },
     entry: [
         path.join(parentDir, 'src/index.js')
     ],
