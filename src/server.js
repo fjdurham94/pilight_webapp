@@ -8,4 +8,4 @@ const port = 8080;
 app.use(express.static(path.join(__dirname, '../dist')));
 app.use('/test', (req, res) => { res.send('Hello') });
 
-app.listen(port, () => { console.log('App listening on ' + host + ':' + port); });
+app.listen(port, host, () => { console.log('App listening on ' + host + ':' + port); });
