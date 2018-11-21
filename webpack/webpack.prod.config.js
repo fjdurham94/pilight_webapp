@@ -1,10 +1,11 @@
 var webpack = require('webpack');
 var path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 var parentDir = path.join(__dirname, '../');
 
 module.exports = {
-    mode: 'development',
+    mode: 'production',
     node: {
         fs: 'empty',
         net: 'empty',
@@ -24,12 +25,13 @@ module.exports = {
 		}
         ]
     },
+    plugins: [
+      new HtmlWebpackPlugin({
+        template: './src/index.html'
+      })
+    ],
     output: {
         path: parentDir + 'dist',
         filename: 'bundle.js'
-    },
-    devServer: {
-        contentBase: parentDir + 'src',
-        historyApiFallback: true
     }
 }
