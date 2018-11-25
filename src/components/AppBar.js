@@ -10,7 +10,7 @@ const Bar = (props) => (
     background='brand'
     pad={{ left: 'medium', right: 'small', vertical: 'small' }}
     elevation='medium'
-    style={{ zIndex: '100' }}
+    style={{ zIndex: '100', height: '10rem' }}
     {...props}
     />
 );
@@ -18,7 +18,7 @@ const Bar = (props) => (
 export default class AppBar extends Component {
     render() {
         return (<Bar>
-            <Heading level='3' margin='none'>{ this.props.title }</Heading>
+            <Heading level='1' margin='none' style={{ fontSize: '8rem' }}>{ this.props.title }</Heading>
         </Bar>);
     }
 }

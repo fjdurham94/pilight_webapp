@@ -47,10 +47,10 @@ export default class App extends Component {
                 <ResponsiveContext.Consumer flex align='center' justify='center'>
                 { (size) => (
                     <Box align='center' margin='large'>
-                        <Text size={ size }>Light it up</Text>
-                        <Box direction='row' gap={ size } margin='large'>
-                            <Button label='On' onClick={ this.clickedOn }/>
-                            <Button label='Off' onClick={ this.clickedOff }/>
+                        <Text size='xxlarge'>Light it up</Text>
+                        <Box width='100%' direction='row' gap='xlarge' margin='large' height='medium'>
+                            <Button style={{ width: '50%', fontSize: '10em' }} label='On' onClick={ this.clickedOn }/>
+                            <Button style={{ width: '50%', fontSize: '10em' }} label='Off' onClick={ this.clickedOff }/>
                         </Box>
                     </Box>
                 ) }
