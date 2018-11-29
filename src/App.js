@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { Grommet, Box, ResponsiveContext, Button, Text } from 'grommet';
+import { Grommet, Box, ResponsiveContext, Button, Text, TextInput } from 'grommet';
 import request from 'request';
 
 import AppBar from './components/AppBar';
 
-const theme = {
+const THEME = {
     global: {
         colors: {
             brand: '#228BE6',
@@ -18,6 +18,24 @@ const theme = {
 };
 
 export default class App extends Component {
+    constructor(props) {
+        super(props);
+        this.state = { alarm: { hour: '', minute: '' } };
+        this.updateAlarmHour.bind(this);
+        this.updateAlarmMin.bind(this);
+        request.get('http://localhost:8081/alarm', this.alarmCallback.bind(this));
+    }
+
+    alarmCallback(err, res) {
+        if (!err && res.statusCode == 200) {
+            const body = JSON.parse(res.body);
+            console.log('success', body);
+            this.setState({ alarm: body.alarm });
+        } else {
+            console.log('error: ', res);
+        }
+    }
+
     clickedOn() {
         console.log('Switching lights on');
         request.post('http://localhost:8081/lights/on', (res) => {
@@ -40,8 +58,37 @@ export default class App extends Component {
         });
     }
 
+    updateAlarmHour(e) {
+        const hour = e.target.value;
+        const alarm = this.state.alarm;
+        alarm.hour = parseInt(hour);
+        request.post({
+            url: 'http://localhost:8081/alarm',
+            json: { alarm }
+        }, (err ,res) => {
+            if (!err && res.statusCode == 200) {
+                this.setState({ alarm });
+            }
+        });
+    }
+
+    updateAlarmMin(e) {
+        const minute = e.target.value;
+        const alarm = this.state.alarm;
+        alarm.minute = parseInt(minute);
+        request.post({
+            url: 'http://localhost:8081/alarm',
+            json: { alarm }
+        }, (err ,res) => {
+            if (!err && res.statusCode == 200) {
+                this.setState({ alarm });
+            }
+        });
+    }
+
     render () {
-        return (<Grommet theme={ theme } full>
+        const alarm = this.state.alarm
+        return (<Grommet theme={ THEME } full>
             <Box fill>
                 <AppBar title='Daylightr'/>
                 <ResponsiveContext.Consumer flex align='center' justify='center'>
@@ -51,6 +98,11 @@ export default class App extends Component {
                         <Box width='100%' direction='row' gap='xlarge' margin='large' height='medium'>
                             <Button style={{ width: '50%', fontSize: '10em' }} label='On' onClick={ this.clickedOn }/>
                             <Button style={{ width: '50%', fontSize: '10em' }} label='Off' onClick={ this.clickedOff }/>
+                        </Box>
+                        <Box width='17rem' direction='row' margin='large' style={{ fontSize: '5rem' }}>
+                            <TextInput value={alarm.hour.toString()} onChange={this.updateAlarmHour.bind(this)}></TextInput>
+                            <Text style={{ fontSize: '5rem', alignSelf: 'center' }}>:</Text>
+                            <TextInput value={alarm.minute.toString()} onChange={this.updateAlarmMin.bind(this)}></TextInput>
                         </Box>
                     </Box>
                 ) }

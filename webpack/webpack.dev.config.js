@@ -30,6 +30,14 @@ module.exports = {
     },
     devServer: {
         contentBase: parentDir + 'src',
-        historyApiFallback: true
+        historyApiFallback: true,
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': '*'
+        },
+        before(app) {
+            const bodyParser = require('body-parser');
+            app.use(bodyParser.json());
+        }
     }
 }
