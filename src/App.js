@@ -3,6 +3,7 @@ import { Grommet, Box, ResponsiveContext, Button, Text, TextInput } from 'gromme
 import { CirclePicker } from 'react-color';
 import request from 'request';
 
+import config from './config';
 import AppBar from './components/AppBar';
 
 const THEME = {
@@ -24,7 +25,7 @@ export default class App extends Component {
         this.state = { alarm: { hour: '', minute: '' } };
         this.updateAlarmHour.bind(this);
         this.updateAlarmMin.bind(this);
-        request.get('http://localhost:8081/alarm', this.alarmCallback.bind(this));
+        request.get(config.url + '/alarm', this.alarmCallback.bind(this));
     }
 
     alarmCallback(err, res) {
@@ -39,7 +40,7 @@ export default class App extends Component {
 
     clickedOn() {
         console.log('Switching lights on');
-        request.post('http://localhost:8081/lights/on', (res) => {
+        request.post(config.url + '/lights/on', (res) => {
             if (res.statusCode == 200) {
                 console.log('success');
             } else {
@@ -50,7 +51,7 @@ export default class App extends Component {
 
     clickedOff() {
         console.log('Switching lights off');
-        request.post('http://localhost:8081/lights/off', (res, err) => {
+        request.post(config.url + '/lights/off', (res, err) => {
             if (res.statusCode == 200) {
                 console.log('success');
             } else {
@@ -60,12 +61,8 @@ export default class App extends Component {
     }
 
     colourChange = (colour) => {
-        console.log('Colour: ', colour);
-        let rgb = {};
-        rgb.red = colour.rgb.r;
-        rgb.green = colour.rgb.g;
-        rgb.blue = colour.rgb.b;
-        request.post({ url: 'http://localhost:8081/lights', data: rgb }, (res, err) => {
+        console.log('Colour: ', colour.rgb);
+        request.post({ url: config.url + '/lights', json: colour.rgb }, (res, err) => {
             if (res.statusCode == 200) {
                 console.log('success');
             } else {
@@ -79,7 +76,7 @@ export default class App extends Component {
         const alarm = this.state.alarm;
         alarm.hour = parseInt(hour);
         request.post({
-            url: 'http://localhost:8081/alarm',
+            url: config.url + '/alarm',
             json: { alarm }
         }, (err ,res) => {
             if (!err && res.statusCode == 200) {
@@ -93,7 +90,7 @@ export default class App extends Component {
         const alarm = this.state.alarm;
         alarm.minute = parseInt(minute);
         request.post({
-            url: 'http://localhost:8081/alarm',
+            url: config.url + '/alarm',
             json: { alarm }
         }, (err ,res) => {
             if (!err && res.statusCode == 200) {
@@ -115,7 +112,7 @@ export default class App extends Component {
                             <Button style={{ width: '50%', fontSize: '10em' }} label='On' onClick={ this.clickedOn }/>
                             <Button style={{ width: '50%', fontSize: '10em' }} label='Off' onClick={ this.clickedOff }/>
                         </Box>
-                        <CirclePicker style={{ width: '300px' }} onChange={ this.colourChange }/>
+                        <CirclePicker style={{ height: '300px' }} onChange={ this.colourChange }/>
                         <Box width='17rem' direction='row' margin='large' style={{ fontSize: '5rem' }}>
                             <TextInput value={alarm.hour.toString()} onChange={this.updateAlarmHour.bind(this)}></TextInput>
                             <Text style={{ fontSize: '5rem', alignSelf: 'center' }}>:</Text>
