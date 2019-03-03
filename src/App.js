@@ -6,6 +6,8 @@ import request from 'request';
 import config from './config';
 import AppBar from './components/AppBar';
 
+import './App.css';
+
 const THEME = {
     global: {
         colors: {
@@ -107,12 +109,13 @@ export default class App extends Component {
                 <ResponsiveContext.Consumer flex align='center' justify='center'>
                 { (size) => (
                     <Box align='center' margin='large'>
-                        <Text size='xxlarge'>Light it up</Text>
                         <Box width='100%' direction='row' gap='xlarge' margin='large' height='medium'>
                             <Button style={{ width: '50%', fontSize: '10em' }} label='On' onClick={ this.clickedOn }/>
                             <Button style={{ width: '50%', fontSize: '10em' }} label='Off' onClick={ this.clickedOff }/>
                         </Box>
-                        <CirclePicker style={{ height: '300px' }} onChange={ this.colourChange }/>
+                        <Box width='80%' direction='row' className='colour-picker-container'>
+                            <CirclePicker style={{ width: 'auto' }} circleSize={ 100 } onChange={ this.colourChange }/>
+                        </Box>
                         <Box width='17rem' direction='row' margin='large' style={{ fontSize: '5rem' }}>
                             <TextInput value={alarm.hour.toString()} onChange={this.updateAlarmHour.bind(this)}></TextInput>
                             <Text style={{ fontSize: '5rem', alignSelf: 'center' }}>:</Text>
