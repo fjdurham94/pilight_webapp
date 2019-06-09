@@ -19,8 +19,13 @@ module.exports = {
 			exclude: /node_modules/,
 			loader: 'babel-loader'
 		},{
-			test: /\.less$/,
-			loaders: ["style-loader", "css-loder", "less-loader"]
+			test: /\.css$/,
+			use: {
+                loader: 'css-loader',
+                options: {
+                    sourceMap: true
+                }
+            }
 		}
         ]
     },
@@ -30,6 +35,14 @@ module.exports = {
     },
     devServer: {
         contentBase: parentDir + 'src',
-        historyApiFallback: true
+        historyApiFallback: true,
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': '*'
+        },
+        before(app) {
+            const bodyParser = require('body-parser');
+            app.use(bodyParser.json());
+        }
     }
 }

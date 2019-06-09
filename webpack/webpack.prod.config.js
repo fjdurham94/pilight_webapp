@@ -20,15 +20,24 @@ module.exports = {
 			exclude: /node_modules/,
 			loader: 'babel-loader'
 		},{
-			test: /\.less$/,
-			loaders: ["style-loader", "css-loder", "less-loader"]
-		}
-        ]
+			test: /\.css$/,
+			use: {
+                loader: 'css-loader',
+                options: {
+                    sourceMap: true
+                }
+            }
+		}],
     },
     plugins: [
       new HtmlWebpackPlugin({
         template: './src/index.html'
-      })
+      }),
+      new webpack.DefinePlugin({
+        'process.env': {
+            'NODE_ENV': 'production',
+        }
+      }),
     ],
     output: {
         path: parentDir + 'dist',
