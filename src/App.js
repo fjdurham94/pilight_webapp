@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Grommet, Box, ResponsiveContext, Button, Text, TextInput } from 'grommet';
 import { CirclePicker } from 'react-color';
 import request from 'request';
+import dotenv from 'dotenv';
+dotenv.config();
 
 import config from './config';
 import AppBar from './components/AppBar';
