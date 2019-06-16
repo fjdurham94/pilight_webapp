@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "dotenv-webpack": "^1.7.0",
     "grommet": "^2.0.1",
     "grommet-icons": "^3.2.1",
     "react": "^16.6.1",
