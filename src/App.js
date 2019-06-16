@@ -30,7 +30,7 @@ export default class App extends Component {
         request.get(config.url + '/alarm', this.alarmCallback.bind(this));
     }
 
-    alarmCallback(err, res) {
+    alarmCallback = (err, res) => {
         if (!err && res.statusCode == 200) {
             const body = JSON.parse(res.body);
             console.log('success', body);
@@ -40,7 +40,7 @@ export default class App extends Component {
         }
     }
 
-    clickedOn() {
+    clickedOn = () => {
         console.log('Switching lights on');
         request.post(config.url + '/lights/on', (res) => {
             if (res.statusCode == 200) {
@@ -51,7 +51,7 @@ export default class App extends Component {
         });
     }
 
-    clickedOff() {
+    clickedOff = () => {
         console.log('Switching lights off');
         request.post(config.url + '/lights/off', (res, err) => {
             if (res.statusCode == 200) {
@@ -73,32 +73,30 @@ export default class App extends Component {
         });
     }
 
-    updateAlarmHour(e) {
-        const hour = e.target.value;
+    saveAlarm = () => {
         const alarm = this.state.alarm;
-        alarm.hour = parseInt(hour);
         request.post({
             url: config.url + '/alarm',
             json: { alarm }
         }, (err ,res) => {
-            if (!err && res.statusCode == 200) {
-                this.setState({ alarm });
+            if (err || res.statusCode !== 200) {
+                console.log('An error happened: ', err);
             }
         });
     }
 
-    updateAlarmMin(e) {
+    updateAlarmHour = (e) => {
+        const hour = e.target.value;
+        const alarm = this.state.alarm;
+        alarm.hour = parseInt(hour);
+        this.setState({ alarm });
+    }
+
+    updateAlarmMin = (e) => {
         const minute = e.target.value;
         const alarm = this.state.alarm;
         alarm.minute = parseInt(minute);
-        request.post({
-            url: config.url + '/alarm',
-            json: { alarm }
-        }, (err ,res) => {
-            if (!err && res.statusCode == 200) {
-                this.setState({ alarm });
-            }
-        });
+        this.setState({ alarm });
     }
 
     render () {
@@ -117,9 +115,13 @@ export default class App extends Component {
                             <CirclePicker width='auto' circleSize={ 100 } onChange={ this.colourChange }/>
                         </Box>
                         <Box width='17rem' direction='row' margin='large' style={{ fontSize: '5rem' }}>
-                            <TextInput value={alarm.hour.toString()} onChange={this.updateAlarmHour.bind(this)}></TextInput>
+                            <TextInput value={alarm.hour.toString()}
+                                onChange={this.updateAlarmHour}
+                                onBlur={ this.saveAlarm } />
                             <Text style={{ fontSize: '5rem', alignSelf: 'center' }}>:</Text>
-                            <TextInput value={alarm.minute.toString()} onChange={this.updateAlarmMin.bind(this)}></TextInput>
+                            <TextInput value={alarm.minute.toString()}
+                                onChange={this.updateAlarmMin}
+                                onBlur={ this.saveAlarm } />
                         </Box>
                     </Box>
                 ) }
