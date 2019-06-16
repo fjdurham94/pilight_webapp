@@ -42,7 +42,7 @@ export default class App extends Component {
 
     clickedOn = () => {
         console.log('Switching lights on');
-        request.post(config.ledctl_url + '/lights/on', (res) => {
+        request.post(config.ledctl_url + '/lights/on', (err, res) => {
             if (res.statusCode == 200) {
                 console.log('success');
             } else {
@@ -53,7 +53,7 @@ export default class App extends Component {
 
     clickedOff = () => {
         console.log('Switching lights off');
-        request.post(config.ledctl_url + '/lights/off', (res, err) => {
+        request.post(config.ledctl_url + '/lights/off', (err, res) => {
             if (res.statusCode == 200) {
                 console.log('success');
             } else {
@@ -64,7 +64,7 @@ export default class App extends Component {
 
     colourChange = (colour) => {
         console.log('Colour: ', colour.rgb);
-        request.post({ url: config.ledctl_url + '/lights', json: colour.rgb }, (res, err) => {
+        request.post({ url: config.ledctl_url + '/lights', json: colour.rgb }, (err, res) => {
             if (res.statusCode == 200) {
                 console.log('success');
             } else {
