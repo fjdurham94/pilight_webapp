@@ -27,7 +27,7 @@ export default class App extends Component {
         this.state = { alarm: { hour: '', minute: '' } };
         this.updateAlarmHour.bind(this);
         this.updateAlarmMin.bind(this);
-        request.get(config.url + '/alarm', this.alarmCallback.bind(this));
+        request.get(config.ledctl_url + '/alarm', this.alarmCallback.bind(this));
     }
 
     alarmCallback = (err, res) => {
@@ -42,7 +42,7 @@ export default class App extends Component {
 
     clickedOn = () => {
         console.log('Switching lights on');
-        request.post(config.url + '/lights/on', (res) => {
+        request.post(config.ledctl_url + '/lights/on', (res) => {
             if (res.statusCode == 200) {
                 console.log('success');
             } else {
@@ -53,7 +53,7 @@ export default class App extends Component {
 
     clickedOff = () => {
         console.log('Switching lights off');
-        request.post(config.url + '/lights/off', (res, err) => {
+        request.post(config.ledctl_url + '/lights/off', (res, err) => {
             if (res.statusCode == 200) {
                 console.log('success');
             } else {
@@ -64,7 +64,7 @@ export default class App extends Component {
 
     colourChange = (colour) => {
         console.log('Colour: ', colour.rgb);
-        request.post({ url: config.url + '/lights', json: colour.rgb }, (res, err) => {
+        request.post({ url: config.ledctl_url + '/lights', json: colour.rgb }, (res, err) => {
             if (res.statusCode == 200) {
                 console.log('success');
             } else {
@@ -76,7 +76,7 @@ export default class App extends Component {
     saveAlarm = () => {
         const alarm = this.state.alarm;
         request.post({
-            url: config.url + '/alarm',
+            url: config.ledctl_url + '/alarm',
             json: { alarm }
         }, (err ,res) => {
             if (err || res.statusCode !== 200) {
