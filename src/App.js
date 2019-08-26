@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Grommet, Box, ResponsiveContext, Button, Text, TextInput } from 'grommet';
+import { Button, TextField } from '@material-ui/core';
 import { CirclePicker } from 'react-color';
 import request from 'request';
 import dotenv from 'dotenv';
 dotenv.config();
 
 import config from './config';
-import AppBar from './components/AppBar';
+// import AppBar from './components/AppBar';
 
 import './App.css';
 
@@ -103,32 +103,28 @@ export default class App extends Component {
 
     render () {
         const alarm = this.state.alarm
-        return (<Grommet theme={ THEME } full>
-            <Box fill>
-                <AppBar title='Daylightr'/>
-                <ResponsiveContext.Consumer flex align='center' justify='center'>
-                { (size) => (
-                    <Box align='center' margin='large'>
-                        <Box width='100%' direction='row' gap='xlarge' margin='large' height='medium'>
+        return (
+            <div fill>
+                <div title='Daylightr'/>
+                    <div align='center' margin='large'>
+                        <div width='100%' direction='row' gap='xlarge' margin='large' height='medium'>
                             <Button style={{ width: '50%', fontSize: '10em' }} label='On' onClick={ this.clickedOn }/>
                             <Button style={{ width: '50%', fontSize: '10em' }} label='Off' onClick={ this.clickedOff }/>
-                        </Box>
-                        <Box width='80%' direction='row'>
+                        </div>
+                        <div width='80%' direction='row'>
                             <CirclePicker width='auto' circleSize={ 100 } onChange={ this.colourChange }/>
-                        </Box>
-                        <Box width='17rem' direction='row' margin='large' style={{ fontSize: '5rem' }}>
-                            <TextInput value={alarm.hour.toString()}
+                        </div>
+                        <div width='17rem' direction='row' margin='large' style={{ fontSize: '5rem' }}>
+                            <TextField value={alarm.hour.toString()}
                                 onChange={this.updateAlarmHour}
                                 onBlur={ this.saveAlarm } />
-                            <Text style={{ fontSize: '5rem', alignSelf: 'center' }}>:</Text>
-                            <TextInput value={alarm.minute.toString()}
+                            <span style={{ fontSize: '5rem', alignSelf: 'center' }}>:</span>
+                            <TextField value={alarm.minute.toString()}
                                 onChange={this.updateAlarmMin}
                                 onBlur={ this.saveAlarm } />
-                        </Box>
-                    </Box>
-                ) }
-                </ResponsiveContext.Consumer>
-            </Box>
-        </Grommet>);
+                        </div>
+                    </div>
+            </div>
+        );
     }
 }
