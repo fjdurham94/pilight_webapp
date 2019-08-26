@@ -1,24 +1,30 @@
 import React, { Component } from 'react';
-import { Grommet, Box, Heading } from 'grommet';
+import { AppBar, Typography, Toolbar } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 
-const Bar = (props) => (
-    <Box
-    tag='header'
-    direction='row'
-    align='center'
-    justify='between'
-    background='brand'
-    pad={{ left: 'medium', right: 'small', vertical: 'small' }}
-    elevation='medium'
-    style={{ zIndex: '100', height: '10rem' }}
-    {...props}
-    />
-);
+const styles = {
+    root: {
+        background: 'linear-gradient(45deg, #228BE6 30%, #FF8E53 90%)',
+    },
+};
 
-export default class AppBar extends Component {
+class MyAppBar extends Component {
     render() {
-        return (<Bar>
-            <Heading level='1' margin='none' style={{ fontSize: '8rem' }}>{ this.props.title }</Heading>
-        </Bar>);
+        const { classes } = this.props;
+
+        return (
+            <AppBar
+                className={ classes.root }
+                position='static'>
+                <Toolbar>
+                    <Typography
+                        variant='h1'>
+                        { this.props.title }
+                    </Typography>
+                </Toolbar>
+            </AppBar>
+        );
     }
 }
+
+export default withStyles(styles)(MyAppBar);
