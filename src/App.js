@@ -1,34 +1,43 @@
 import React, { Component } from 'react';
 import { Button, TextField } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { CirclePicker } from 'react-color';
 import request from 'request';
 import dotenv from 'dotenv';
 dotenv.config();
 
 import config from './config';
-// import AppBar from './components/AppBar';
+import AppBar from './components/AppBar';
 
 import './App.css';
 
-const THEME = {
-    global: {
-        colors: {
-            brand: '#228BE6',
-        },
-        font: {
-            family: 'Roboto',
-            size: '14px',
-            height: '20px',
-        },
+const style = (theme) => ({
+    pageContainer: {
+        height: '100%',
+        margin: theme.spacing(10),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
     },
-};
+    powerContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        width: '100%',
+    },
+    powerButton: {
+        width: '45%',
+        fontSize: '7rem',
+    },
+    timeInput: {
+        fontSize: '8rem',
+    }
+});
 
-export default class App extends Component {
+class App extends Component {
     constructor(props) {
         super(props);
-        this.state = { alarm: { hour: '', minute: '' } };
-        this.updateAlarmHour.bind(this);
-        this.updateAlarmMin.bind(this);
+        this.state = { alarm: '' };
         request.get(config.ledctl_url + '/alarm', this.alarmCallback.bind(this));
     }
 
@@ -36,7 +45,8 @@ export default class App extends Component {
         if (!err && res.statusCode == 200) {
             const body = JSON.parse(res.body);
             console.log('success', body);
-            this.setState({ alarm: body.alarm });
+            const alarm = body.alarm.hour.toString() + ':' + body.alarm.minute.toString();
+            this.setState({ alarm });
         } else {
             console.log('error: ', res);
         }
@@ -76,7 +86,11 @@ export default class App extends Component {
     }
 
     saveAlarm = () => {
-        const alarm = this.state.alarm;
+        const alarmSplit = this.state.alarm.split(':');
+        const alarm = {
+            hour: alarmSplit[0],
+            minute: alarmSplit[1],
+        }
         request.post({
             url: config.ledctl_url + '/alarm',
             json: { alarm }
@@ -87,44 +101,47 @@ export default class App extends Component {
         });
     }
 
-    updateAlarmHour = (e) => {
-        const hour = e.target.value;
-        const alarm = this.state.alarm;
-        alarm.hour = parseInt(hour);
-        this.setState({ alarm });
-    }
-
-    updateAlarmMin = (e) => {
-        const minute = e.target.value;
-        const alarm = this.state.alarm;
-        alarm.minute = parseInt(minute);
-        this.setState({ alarm });
-    }
+    updateAlarm = (evt) => this.setState({ alarm: evt.target.value });
 
     render () {
-        const alarm = this.state.alarm
+        const { classes } = this.props;
+        const { alarm } = this.state;
+
         return (
-            <div fill>
-                <div title='Daylightr'/>
-                    <div align='center' margin='large'>
-                        <div width='100%' direction='row' gap='xlarge' margin='large' height='medium'>
-                            <Button style={{ width: '50%', fontSize: '10em' }} label='On' onClick={ this.clickedOn }/>
-                            <Button style={{ width: '50%', fontSize: '10em' }} label='Off' onClick={ this.clickedOff }/>
+            <React.Fragment>
+                <AppBar
+                    title='Daylightr'/>
+                    <div className={ classes.pageContainer + ' child-margins' }>
+                        <div className={ classes.powerContainer }>
+                            <Button
+                                variant='outlined'
+                                className={ classes.powerButton } 
+                                onClick={ this.clickedOn }>
+                                ON
+                            </Button>
+                            <Button
+                                variant='outlined'
+                                className={ classes.powerButton }
+                                onClick={ this.clickedOff }>
+                                OFF
+                            </Button>
                         </div>
-                        <div width='80%' direction='row'>
-                            <CirclePicker width='auto' circleSize={ 100 } onChange={ this.colourChange }/>
-                        </div>
-                        <div width='17rem' direction='row' margin='large' style={{ fontSize: '5rem' }}>
-                            <TextField value={alarm.hour.toString()}
-                                onChange={this.updateAlarmHour}
-                                onBlur={ this.saveAlarm } />
-                            <span style={{ fontSize: '5rem', alignSelf: 'center' }}>:</span>
-                            <TextField value={alarm.minute.toString()}
-                                onChange={this.updateAlarmMin}
-                                onBlur={ this.saveAlarm } />
-                        </div>
+                        <CirclePicker
+                            width='43rem'
+                            circleSize={ 100 }
+                            onChange={ this.colourChange }/>
+                        <TextField
+                            type='time'
+                            value={ alarm }
+                            onChange={ this.updateAlarm }
+                            InputProps={{
+                                className: classes.timeInput,
+                            }}
+                            onBlur={ this.saveAlarm } />
                     </div>
-            </div>
+            </React.Fragment>
         );
     }
 }
+
+export default withStyles(style)(App);
