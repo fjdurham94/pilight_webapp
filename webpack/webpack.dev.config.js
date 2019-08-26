@@ -18,16 +18,10 @@ module.exports = {
             test: /\.(js|jsx)$/,
 			exclude: /node_modules/,
 			loader: 'babel-loader'
-		},{
+		}, {
 			test: /\.css$/,
-			use: {
-                loader: 'css-loader',
-                options: {
-                    sourceMap: true
-                }
-            }
-		}
-        ]
+			use: ['style-loader', 'css-loader'],
+		}],
     },
     output: {
         path: parentDir + 'dist',
